@@ -1,0 +1,16 @@
+{
+  "name": "reverse-polish-notation",
+  "version": "1.0.0",
+  "description": "reverse polish notation for cs-570",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seige13/reverse-polish-notation.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
