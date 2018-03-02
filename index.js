@@ -9,7 +9,16 @@
  * Ask the user for another math problem.
  */
 const readline = require('readline');
-const OPERATORS = ['+', '-', '*', '/'];
+// const OPERATORS = ['+', '-', '*', '/', '%', 'POW'];
+const OPERATORS = {
+  'POW': {prec: 2, assoc: 'R'},
+  '*':   {prec: 1, assoc: 'L'},
+  '/':   {prec: 1, assoc: 'L'},
+  '%':   {prec: 1, assoc: 'L'},
+  '+':   {prec: 0, assoc: 'L'},
+  '-':   {prec: 0, assoc: 'L'},
+};
+
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -74,27 +83,56 @@ function getInfixQueue() {
  * @param {array} problem
  */
 function convertToPostfix(problem) {
-  let output = [];
-  let ops = [];
+  let postQ = [];  //postQ
+  let opStack = [];     //opStack
 
-  for (let i = 0; i < problem.length; i++) {
-    if (parseInt(problem[i])) {
-      output.push(problem[i])
-    } else if (OPERATORS.includes(problem[i])) { //this needs to assess precedence
-      ops.push(problem[i]);
-      console.log('this is an operator');
-    } else if (problem[i] === ')') {
-      ops.push(problem[i]);
-      console.log('this is a right parenthesis') //this needs to assess if top of stack is right parentheses
+
+  for (let i = 0; i < problem.length; i++) {    //while (infixQ is not empty)
+
+    let t = problem[i];
+
+    if (parseInt(t)) {  //if the token is a number, then push it to the output queue
+      postQ.push(t)
+    } 
+    else if (opStack.length == 0) { //if operator stack is empty
+        opStack.push(t);            //push t onto operator stack
+    }
+    else if (t == '(') {    //if the token is a left bracket
+        opStack.push(t);    //push it onto the operator stack
+    }
+    else if (t == ')') {    //if the token is a right bracket
+        while (opStack[opStack.length-1] != '(') {
+            postQ.push(opStack.pop());  //pop operators from the operator stack onto the output queue
+        }
+        opStack.pop();  // pop the left bracket from the stack
+    }
+    else {  //if 
+        while 
+            (
+                (opStack.length > 0)    //operator stack is not empty
+                &&
+                (opStack[opStack.length-1] != '(')  // (the operator at the top of the stack is not a left bracket)
+                &&
+                (
+                    (OPERATORS[t].prec < OPERATORS[opStack[opStack.length-1]].prec)   // (there is an operator at the top of the operator stack with greater precedence)
+                    || // or
+                    ((OPERATORS[opStack[opStack.length-1]].prec == OPERATORS[t].prec) && (OPERATORS[t].assoc == 'L'))
+                )   // (the operator at the top of the operator stack has equal precedence and the operator is left associative)
+            ) {
+                postQ.push(opStack.pop());  // pop operators from the operator stack, onto the output queue
+            }
+
+        opStack.push(t);    // push the read operator onto the operator stack
     }
   }
 
-  for (let i = 0; i < ops.length; i++) {
-    output.push(ops[i])
+  // Now there are no tokens left in infixQ 
+  for (let i = opStack.length - 1; i >= 0; i--) {
+    postQ.push(opStack[i]); //transfer remaining operators from stack into postQ
   }
 
-  console.log(output);
-  console.log(calculateResult(output));
+  console.log(postQ);
+  console.log(calculateResult(postQ));
 }
 
 /**
