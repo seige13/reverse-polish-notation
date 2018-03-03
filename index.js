@@ -164,10 +164,7 @@ function calculateResult(problem) {
 
     }
   }
-  let result = stack.pop();
-  if (result == Infinity)
-    return ('Division by 0!');
-  return result;
+  return stack.pop();
 }
 
 /**
