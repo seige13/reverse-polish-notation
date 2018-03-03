@@ -67,7 +67,6 @@ function getInfixQueue() {
         }
       }
 
-      console.log(infixQ);
       if (invalidSymbolFlag === 0) {
         convertToPostfix(infixQ);
       }
@@ -91,7 +90,7 @@ function convertToPostfix(problem) {
 
     let token = problem[i];
 
-    if (parseInt(token)) {  //if the token is a number, then push it to the output queue
+    if (parseInt(token) || token == '0') {  //if the token is a number, then push it to the output queue
       postQ.push(token)
     }
     else if (opStack.length === 0) { //if operator stack is empty
