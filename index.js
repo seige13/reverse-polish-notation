@@ -51,7 +51,7 @@ function getInfixQueue() {
           infixQ.push(answer[i++]);
         }
         else if (/\d/.test(answer[i])) {
-          while (/\d/.test(answer[i])) {
+          while (/\d/.test(answer[i]) || answer[i] == '.') {
             num.push(answer[i++]);
           }
           infixQ.push(num.join(''));
@@ -67,6 +67,7 @@ function getInfixQueue() {
         }
       }
 
+      console.log(infixQ);
       if (invalidSymbolFlag === 0) {
         convertToPostfix(infixQ);
       }
@@ -130,7 +131,7 @@ function convertToPostfix(problem) {
     postQ.push(opStack[i]); //transfer remaining operators from stack into postQ
   }
 
-  console.log(postQ);
+  console.log(postQ.join(' '));
   console.log(calculateResult(postQ));
 }
 
@@ -153,7 +154,11 @@ function calculateResult(problem) {
       let firstNumber = stack.pop();
       if (token === 'POW') {
         stack.push(Math.pow(firstNumber, secondNumber));
-      } else {
+      } 
+      else if (parseInt(secondNumber) == 0 && token == '/' ) {
+        throw new Error('Divide-by-Zero Exception'); //Catch divide-by-zero exception
+      }
+      else {
         stack.push(eval(firstNumber + token + secondNumber + ''));
       }
 
