@@ -86,9 +86,7 @@ function convertToPostfix(problem) {
   let opStack = [];
 
 
-  for (let i = 0; i < problem.length; i++) {    //while (infixQ is not empty)
-
-    let token = problem[i];
+  while (token = problem.shift()) {
 
     if (parseInt(token) || token == '0') {  //if the token is a number, then push it to the output queue
       postQ.push(token)
@@ -126,10 +124,10 @@ function convertToPostfix(problem) {
   }
 
   // Now there are no tokens left in infixQ 
-  for (let i = opStack.length - 1; i >= 0; i--) {
-    postQ.push(opStack[i]); //transfer remaining operators from stack into postQ
+  while (ops = opStack.pop()) {
+    postQ.push(ops); //transfer remaining operators from stack into postQ
   }
-
+ 
   console.log(postQ.join(' '));
   
   try {
