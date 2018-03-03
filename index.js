@@ -131,7 +131,13 @@ function convertToPostfix(problem) {
   }
 
   console.log(postQ.join(' '));
-  console.log(calculateResult(postQ));
+  
+  try {
+    console.log(calculateResult(postQ));
+  } catch(err) {
+    console.log(err.message);
+  }
+  
 }
 
 /**
